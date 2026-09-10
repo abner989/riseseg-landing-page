@@ -50,7 +50,7 @@ export default function Home() {
     <main>
       <header className="site-header">
         <a className="brand" href="#inicio" aria-label="Riseseg — início">
-          <img src="/rise-seg/logo-riseseg-v21.png" alt="Riseseg — Corretora de Seguros e Finanças" />
+          <img src="rise-seg/logo-riseseg-v21.png" alt="Riseseg — Corretora de Seguros e Finanças" />
         </a>
         <nav aria-label="Navegação principal">
           <a href="#solucoes">Soluções</a><a href="#jeito-riseseg">Nosso jeito</a><a href="#especialistas">Especialistas</a><a href="#duvidas">Dúvidas</a>
@@ -70,7 +70,7 @@ export default function Home() {
           </div>
         </div>
         <div className="hero-visual" aria-label="Atendimento consultivo Riseseg">
-          <img src="/rise-seg/hero-riseseg-original.png" alt="Especialista orientando empresários em uma conversa consultiva" />
+          <img src="rise-seg/hero-riseseg-original.png" alt="Especialista orientando empresários em uma conversa consultiva" />
           <div className="hero-stamp"><span>Nosso ponto de partida</span><strong>Ouvir antes de recomendar.</strong></div>
           <p className="vertical-note">Tecnologia que facilita · Pessoas que orientam</p>
         </div>
@@ -106,15 +106,15 @@ export default function Home() {
 
       <section className="principles" aria-label="Princípios de atendimento">
         <article className="principle principle-human">
-          <div className="principle-image"><img src="/rise-seg/humana.jpg" alt="Atendimento humano e próximo" /></div>
+          <div className="principle-image"><img src="rise-seg/humana.jpg" alt="Atendimento humano e próximo" /></div>
           <div className="principle-copy" data-reveal><span>Humanização</span><h2>Você não é um número de apólice.</h2><p>Seu contexto vem antes do produto. Cada recomendação é construída para o que realmente importa proteger agora.</p></div>
         </article>
         <article className="principle principle-consultive">
-          <div className="principle-image"><img src="/rise-seg/consultiva.jpg" alt="Análise consultiva de opções de seguro" /></div>
+          <div className="principle-image"><img src="rise-seg/consultiva.jpg" alt="Análise consultiva de opções de seguro" /></div>
           <div className="principle-copy" data-reveal><span>Clareza</span><h2>Você entende o que está contratando.</h2><p>Coberturas, exclusões e valores explicados antes da assinatura. Se ficou uma dúvida, a gente explica de novo.</p></div>
         </article>
         <article className="principle principle-modern">
-          <div className="principle-image"><img src="/rise-seg/contemporanea.jpg" alt="Profissional usando o celular em ambiente corporativo contemporâneo" /></div>
+          <div className="principle-image"><img src="rise-seg/contemporanea.jpg" alt="Profissional usando o celular em ambiente corporativo contemporâneo" /></div>
           <div className="principle-copy" data-reveal><span>Compromisso</span><h2>O trabalho não termina na assinatura.</h2><p>Seguimos presentes na renovação, nos ajustes de cobertura e no momento em que você mais precisa de orientação.</p></div>
         </article>
       </section>
@@ -132,8 +132,8 @@ export default function Home() {
       <section className="experts" id="especialistas">
         <div className="experts-intro" data-reveal><p className="eyebrow"><span>Atendimento direto</span></p><h2>Do outro lado, alguém que conhece o assunto.</h2><p>Pessoas preparadas para ouvir, explicar e orientar cada decisão.</p></div>
         <div className="expert-cards">
-          <article data-reveal><div className="expert-portrait"><img src="/rise-seg/foto-gui.jpeg" alt="Guilherme Alves" /></div><p><strong>Guilherme Alves</strong><span>Head Comercial</span></p></article>
-          <article data-reveal><div className="expert-portrait"><img src="/rise-seg/foto-isa.jpeg" alt="Isabela Ribeiro" /></div><p><strong>Isabela Ribeiro</strong><span>Especialista em seguro saúde</span></p></article>
+          <article data-reveal><div className="expert-portrait"><img src="rise-seg/foto-gui.jpeg" alt="Guilherme Alves" /></div><p><strong>Guilherme Alves</strong><span>Head Comercial</span></p></article>
+          <article data-reveal><div className="expert-portrait"><img src="rise-seg/foto-isa.jpeg" alt="Isabela Ribeiro" /></div><p><strong>Isabela Ribeiro</strong><span>Especialista em seguro saúde</span></p></article>
         </div>
       </section>
 
@@ -152,7 +152,7 @@ export default function Home() {
       </section>
 
       <footer>
-        <a className="footer-logo" href="#inicio" aria-label="Riseseg — voltar ao início"><img src="/rise-seg/logo-riseseg-v21.png" alt="Riseseg — Corretora de Seguros e Finanças" /></a>
+        <a className="footer-logo" href="#inicio" aria-label="Riseseg — voltar ao início"><img src="rise-seg/logo-riseseg-v21.png" alt="Riseseg — Corretora de Seguros e Finanças" /></a>
         <nav aria-label="Navegação do rodapé"><a href="#solucoes">Soluções</a><a href="#jeito-riseseg">Nosso jeito</a><a href="#especialistas">Especialistas</a><a className="social-link" href="https://www.instagram.com/riseseg/" target="_blank" rel="noreferrer" aria-label="Instagram da Riseseg"><SocialIcon network="instagram" /></a><a className="social-link" href="https://www.linkedin.com/company/riseseg-corretora-de-seguros/home/" target="_blank" rel="noreferrer" aria-label="LinkedIn da Riseseg"><SocialIcon network="linkedin" /></a></nav>
         <p>Proteção para continuar avançando.</p>
       </footer>

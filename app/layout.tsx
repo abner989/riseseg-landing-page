@@ -5,9 +5,9 @@ export const metadata: Metadata = {
   title: "Riseseg | Proteção para continuar avançando",
   description: "Seguros, saúde e serviços financeiros com orientação humana e consultiva para empresas, pessoas e famílias.",
   icons: {
-    icon: "/rise-seg/favicon-riseseg.png",
-    shortcut: "/rise-seg/favicon-riseseg.png",
-    apple: "/rise-seg/favicon-riseseg.png",
+    icon: "rise-seg/favicon-riseseg.png",
+    shortcut: "rise-seg/favicon-riseseg.png",
+    apple: "rise-seg/favicon-riseseg.png",
   },
 };
 
