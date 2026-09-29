@@ -1,16 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
+import { categories, products } from "./products";
 
 const whatsappGuilherme =
-  "https://wa.me/5511993109896?text=Ol%C3%A1%2C%20Guilherme.%20Conheci%20a%20Rise%20Seg%20pelo%20site%20e%20quero%20come%C3%A7ar%20um%20diagn%C3%B3stico.";
-
-const solutionGroups = [
-  { label: "Saúde", title: "Planos para cada momento.", description: "Escolhas explicadas com clareza para você, sua família ou sua empresa.", items: ["Individual", "Familiar", "Coletivo empresarial"] },
-  { label: "Empresas", title: "Proteção para quem produz e opera.", description: "Coberturas para o patrimônio, a operação, as pessoas e os riscos do negócio.", items: ["Empresarial", "Agronegócios", "Máquinas e equipamentos", "Responsabilidade civil", "Condomínio e imobiliária", "Eventos", "Transportes"] },
-  { label: "Pessoas", title: "Proteção que acompanha sua vida.", description: "Soluções para cuidar do que faz parte do seu dia a dia.", items: ["Automóvel", "Vida", "Residência", "Viagem", "Bike e eletrônicos", "Equipamentos portáteis"] },
-  { label: "Serviços financeiros", title: "Crédito e planejamento, com direção.", description: "Alternativas para organizar projetos, patrimônio e fluxo de caixa.", items: ["Consórcio", "Capital de giro", "Empréstimo com garantia", "Financiamento de veículo", "Cartão Porto Bank"] },
-];
+  "https://wa.me/5511993109896?text=Ol%C3%A1%2C%20Guilherme.%20Conheci%20a%20Riseseg%20pelo%20site%20e%20quero%20come%C3%A7ar%20um%20diagn%C3%B3stico.";
 
 function Arrow() {
   return <span aria-hidden="true">↗</span>;
@@ -24,6 +18,10 @@ function SocialIcon({ network }: { network: "instagram" | "linkedin" }) {
 }
 
 export default function Home() {
+  const [activeProduct, setActiveProduct] = useState(0);
+  const slideRef = useRef<HTMLElement>(null);
+  const product = products[activeProduct];
+  const selectProduct = (index: number) => { setActiveProduct(index); slideRef.current?.focus(); };
   useEffect(() => {
     const root = document.documentElement;
     root.classList.add("reveal-ready");
@@ -53,7 +51,7 @@ export default function Home() {
           <img src="rise-seg/logo-riseseg-v21.png" alt="Riseseg — Corretora de Seguros e Finanças" />
         </a>
         <nav aria-label="Navegação principal">
-          <a href="#solucoes">Soluções</a><a href="#jeito-riseseg">Nosso jeito</a><a href="#especialistas">Especialistas</a><a href="#duvidas">Dúvidas</a>
+          <a href="#planos-de-saude">Planos de Saúde</a><a href="#solucoes">Soluções</a><a href="#jornada">Pós-contratação</a><a href="#especialistas">Especialistas</a>
         </nav>
         <a className="header-cta" href={whatsappGuilherme} target="_blank" rel="noreferrer">Falar com especialista <Arrow /></a>
       </header>
@@ -64,6 +62,7 @@ export default function Home() {
           <h1>Proteção para continuar avançando.</h1>
           <p className="hero-pivot">Segurança para decidir. Direção para cada nova fase.</p>
           <p className="hero-description">A Riseseg reúne soluções para empresas, pessoas e famílias com um atendimento que explica o porquê de cada recomendação — sem jargão e sem pressa para fechar.</p>
+          <p className="coverage-line">✦ Atendimento em todo o Brasil</p>
           <div className="hero-actions">
             <a className="primary-cta" href={whatsappGuilherme} target="_blank" rel="noreferrer">Começar meu diagnóstico <Arrow /></a>
             <span>Atendimento direto pelo WhatsApp</span>
@@ -91,16 +90,24 @@ export default function Home() {
         <div className="solutions-heading" data-reveal>
           <p className="eyebrow"><span>Portfólio completo</span></p>
           <h2>Um só parceiro para proteger e avançar.</h2>
-          <p>Da saúde ao crédito, cada solução passa pelo mesmo cuidado consultivo. Encontre o ramo certo para o seu momento.</p>
+          <p>Planos de Saúde para cada momento, seguros para empresas e pessoas e serviços financeiros. Explore as opções; as coberturas finais dependem da proposta e do contrato.</p>
         </div>
-        <div className="solution-grid">
-          {solutionGroups.map((group, index) => (
-            <article key={group.label} data-reveal style={{ "--delay": (index * 80) + "ms" } as React.CSSProperties}>
-              <div className="solution-top"><span>{String(index + 1).padStart(2, "0")}</span><b>{group.label}</b></div>
-              <h3>{group.title}</h3><p>{group.description}</p>
-              <ul>{group.items.map((item) => <li key={item}>{item}</li>)}</ul>
+        <div id="planos-de-saude" className="product-browser" data-reveal>
+          <h3 className="browser-title">{product.category === "Planos de Saúde" ? "Planos de Saúde para cada momento" : product.category}</h3>
+          <div className="category-tabs" role="group" aria-label="Ramos de atuação">
+            {categories.map((category) => <button key={category} type="button" className={category === product.category ? "active" : ""} onClick={() => selectProduct(products.findIndex((item) => item.category === category))}>{category}</button>)}
+          </div>
+          <div className="product-layout">
+            <div className="product-index" aria-label="Produtos do ramo">
+              {products.map((item, index) => item.category === product.category && <button key={item.name} type="button" className={index === activeProduct ? "active" : ""} onClick={() => selectProduct(index)}>{item.name}<span aria-hidden="true">↗</span></button>)}
+            </div>
+            <article className="product-slide" ref={slideRef} tabIndex={-1} aria-live="polite">
+              <div className="product-slide-top"><span>{product.category}</span><span>{String(activeProduct + 1).padStart(2, "0")} / {products.length}</span></div>
+              <h3>{product.name}</h3><p className="product-description">{product.description}</p><p className="product-audience">{product.audience}</p>
+              <h4>O que pode incluir</h4><ul>{product.includes.map((feature) => <li key={feature}>{feature}</li>)}</ul>
+              <div className="product-actions"><a href={whatsappGuilherme} target="_blank" rel="noreferrer">Falar com especialista <Arrow /></a><div><button type="button" aria-label="Produto anterior" onClick={() => selectProduct((activeProduct - 1 + products.length) % products.length)}>←</button><button type="button" aria-label="Próximo produto" onClick={() => selectProduct((activeProduct + 1) % products.length)}>→</button></div></div>
             </article>
-          ))}
+          </div>
         </div>
       </section>
 
@@ -129,6 +136,27 @@ export default function Home() {
         </ol>
       </section>
 
+      <section className="aftercare" id="jornada">
+        <div className="aftercare-heading" data-reveal><p className="eyebrow"><span>Presença depois da contratação</span></p><h2>Como cuidamos de você depois do “sim”.</h2><p>Uma jornada acompanhada, com responsabilidades claras em cada etapa.</p></div>
+        <ol className="journey-list">
+          <li data-reveal><span>01</span><div><h3>Equipe Comercial</h3><p>Consultoria para qualificar necessidades e indicar a melhor opção de plano.</p></div></li>
+          <li data-reveal><span>02</span><div><h3>Implantação</h3><p>Cadastro, acompanhamento, análise e confirmação da vigência.</p></div></li>
+          <li data-reveal><span>03</span><div><h3>Avaliação de Sucesso</h3><p>Acompanhamento por 90 dias para dúvidas, boletos e primeiros ajustes.</p></div></li>
+          <li data-reveal><span>04</span><div><h3>Gestão de Conta</h3><p>Um agente de relacionamento específico acompanha você durante todo o contrato, cuidando de movimentações cadastrais, tratativas com operadoras e auxílios pontuais.</p></div></li>
+          <li data-reveal><span>05</span><div><h3>Setor de Qualidade</h3><p>Informações sobre reajustes e suporte para manter a qualidade do atendimento.</p></div></li>
+        </ol>
+      </section>
+
+      <section className="ongoing-care">
+        <div data-reveal><p className="eyebrow"><span>Quando você precisa de nós</span></p><h2>Suporte que continua presente.</h2></div>
+        <div className="care-grid">
+          <article data-reveal><span>01</span><h3>Gestão de Sinistro</h3><p>Intermediação com a seguradora e acompanhamento da solicitação até a resolução.</p></article>
+          <article data-reveal><span>02</span><h3>Acompanhamento de Conta PJ Saúde</h3><p>Inclusões, exclusões e alterações cadastrais; conferência de cobrança e boletos, projeção de custos e auxílio em pedidos de autorização.</p></article>
+          <article data-reveal><span>03</span><h3>Reversão de Reajuste</h3><p>Apoio técnico para analisar, contestar ou negociar reajustes de planos de saúde considerados anormais ou abusivos, quando cabível.</p></article>
+          <article data-reveal><span>04</span><h3>Suporte Jurídico</h3><p>Apoio em questões contratuais e regulatórias relacionadas às soluções contratadas, conforme a situação.</p></article>
+        </div>
+      </section>
+
       <section className="experts" id="especialistas">
         <div className="experts-intro" data-reveal><p className="eyebrow"><span>Atendimento direto</span></p><h2>Do outro lado, alguém que conhece o assunto.</h2><p>Pessoas preparadas para ouvir, explicar e orientar cada decisão.</p></div>
         <div className="expert-cards">
@@ -151,10 +179,12 @@ export default function Home() {
         <a href={whatsappGuilherme} target="_blank" rel="noreferrer">Falar com a Riseseg <Arrow /></a><span>Sem formulário. Atendimento direto pelo WhatsApp.</span>
       </section>
 
+      <section className="contact-section" id="contato" data-reveal><div><p className="eyebrow"><span>Contato</span></p><h2>Vamos conversar?</h2><p>Atendimento em todo o Brasil, com uma equipe próxima quando você precisa.</p></div><address>Rua Jurubatuba, 1350, Sala 911 — Centro<br />São Bernardo do Campo - SP<br /><a href="mailto:atendimento@riseseg.com">atendimento@riseseg.com</a></address></section>
+
       <footer>
         <a className="footer-logo" href="#inicio" aria-label="Riseseg — voltar ao início"><img src="rise-seg/logo-riseseg-v21.png" alt="Riseseg — Corretora de Seguros e Finanças" /></a>
-        <nav aria-label="Navegação do rodapé"><a href="#solucoes">Soluções</a><a href="#jeito-riseseg">Nosso jeito</a><a href="#especialistas">Especialistas</a><a className="social-link" href="https://www.instagram.com/riseseg/" target="_blank" rel="noreferrer" aria-label="Instagram da Riseseg"><SocialIcon network="instagram" /></a><a className="social-link" href="https://www.linkedin.com/company/riseseg-corretora-de-seguros/home/" target="_blank" rel="noreferrer" aria-label="LinkedIn da Riseseg"><SocialIcon network="linkedin" /></a></nav>
-        <p>Proteção para continuar avançando.</p>
+        <nav aria-label="Navegação do rodapé"><a href="#planos-de-saude">Planos de Saúde</a><a href="#solucoes">Soluções</a><a href="#jornada">Pós-contratação</a><a href="contato/">Contato</a><a className="social-link" href="https://www.instagram.com/riseseg/" target="_blank" rel="noreferrer" aria-label="Instagram da Riseseg"><SocialIcon network="instagram" /></a><a className="social-link" href="https://www.linkedin.com/company/riseseg-corretora-de-seguros/home/" target="_blank" rel="noreferrer" aria-label="LinkedIn da Riseseg"><SocialIcon network="linkedin" /></a></nav>
+        <p>Proteção para continuar avançando. <span className="footer-coverage">Atendimento em todo o Brasil</span></p>
       </footer>
 
       <a className="mobile-cta" href={whatsappGuilherme} target="_blank" rel="noreferrer">Falar no WhatsApp <Arrow /></a>

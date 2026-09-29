@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Riseseg | Proteção para continuar avançando",
-  description: "Seguros, saúde e serviços financeiros com orientação humana e consultiva para empresas, pessoas e famílias.",
+  title: "Riseseg | Plano de Saúde, seguros e serviços financeiros",
+  description: "Compare opções de Plano de Saúde, seguros e serviços financeiros com orientação consultiva e atendimento em todo o Brasil. Conheça a Riseseg.",
   icons: {
     icon: "rise-seg/favicon-riseseg.png",
     shortcut: "rise-seg/favicon-riseseg.png",
