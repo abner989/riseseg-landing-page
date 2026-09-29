@@ -183,7 +183,7 @@ export default function Home() {
 
       <footer>
         <a className="footer-logo" href="#inicio" aria-label="Riseseg — voltar ao início"><img src="rise-seg/logo-riseseg-v21.png" alt="Riseseg — Corretora de Seguros e Finanças" /></a>
-        <nav aria-label="Navegação do rodapé"><a href="#planos-de-saude">Planos de Saúde</a><a href="#solucoes">Soluções</a><a href="#jornada">Pós-contratação</a><a href="contato/">Contato</a><a className="social-link" href="https://www.instagram.com/riseseg/" target="_blank" rel="noreferrer" aria-label="Instagram da Riseseg"><SocialIcon network="instagram" /></a><a className="social-link" href="https://www.linkedin.com/company/riseseg-corretora-de-seguros/home/" target="_blank" rel="noreferrer" aria-label="LinkedIn da Riseseg"><SocialIcon network="linkedin" /></a></nav>
+        <nav aria-label="Navegação do rodapé"><a href="#planos-de-saude">Planos de Saúde</a><a href="#solucoes">Soluções</a><a href="#jornada">Pós-contratação</a><a href="contato.html">Contato</a><a className="social-link" href="https://www.instagram.com/riseseg/" target="_blank" rel="noreferrer" aria-label="Instagram da Riseseg"><SocialIcon network="instagram" /></a><a className="social-link" href="https://www.linkedin.com/company/riseseg-corretora-de-seguros/home/" target="_blank" rel="noreferrer" aria-label="LinkedIn da Riseseg"><SocialIcon network="linkedin" /></a></nav>
         <p>Proteção para continuar avançando. <span className="footer-coverage">Atendimento em todo o Brasil</span></p>
       </footer>
 
