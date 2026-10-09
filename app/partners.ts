@@ -1,11 +1,11 @@
-type Brand = { name: string; file: string };
+type Brand = { name: string; file: string; onDark?: boolean };
 export const partnerGroups: { name: string; brands: Brand[] }[] = [
   { name: "Saúde empresarial", brands: [
     { name: "Porto", file: "porto.svg" }, { name: "Bradesco Saúde", file: "bradesco.png" },
     { name: "Amil", file: "amil.png" }, { name: "SulAmérica", file: "sulamerica.png" },
     { name: "NotreDame Intermédica", file: "notredame.png" }, { name: "Hapvida", file: "hapvida.png" },
-    { name: "Omint", file: "omint.webp" }, { name: "Care Plus", file: "careplus.svg" },
-    { name: "Seguros Unimed", file: "seguros-unimed.png" }, { name: "Alice Saúde", file: "alice.svg" },
+    { name: "Omint", file: "omint.webp", onDark: true }, { name: "Care Plus", file: "careplus.svg" },
+    { name: "Seguros Unimed", file: "seguros-unimed.png" }, { name: "Alice Saúde", file: "alice.svg", onDark: true },
     { name: "Unimed Jundiaí", file: "unimed-jundiai.png" }, { name: "Unimed Campinas", file: "unimed-campinas.png" },
   ] },
   { name: "Saúde para pessoas", brands: [
