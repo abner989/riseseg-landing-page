@@ -43,3 +43,6 @@ yarn-error.log*
 # local image-processing helpers and source experiments
 /.image-deps/
 /IMG_9093*
+/partner-qa.png
+/riseseg-preview.jpg
+/public/rise-seg/partners/notrelife-banner.jpg

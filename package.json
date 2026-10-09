@@ -8,6 +8,7 @@
   "scripts": {
     "dev": "vinext dev",
     "build": "vinext build",
+    "check": "tsc --project tsconfig.app-check.json --noEmit",
     "start": "vinext start"
   },
   "dependencies": {

@@ -3,7 +3,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Riseseg | Plano de Saúde, seguros e serviços financeiros",
-  description: "Compare opções de Plano de Saúde, seguros e serviços financeiros com orientação consultiva e atendimento em todo o Brasil. Conheça a Riseseg.",
+  description: "Plano de Saúde, seguros e serviços financeiros para sua família, sua empresa e seus planos. Converse com a Riseseg: cuidado próximo e atendimento em todo o Brasil.",
   icons: {
     icon: "rise-seg/favicon-riseseg.png",
     shortcut: "rise-seg/favicon-riseseg.png",

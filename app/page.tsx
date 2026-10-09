@@ -2,192 +2,130 @@
 
 import { useEffect, useRef, useState } from "react";
 import { categories, products } from "./products";
+import { Brand, Icon, SocialLinks, whatsappLink } from "./ui";
+import { partnerGroups } from "./partners";
 
-const whatsappGuilherme =
-  "https://wa.me/5511993109896?text=Ol%C3%A1%2C%20Guilherme.%20Conheci%20a%20Riseseg%20pelo%20site%20e%20quero%20come%C3%A7ar%20um%20diagn%C3%B3stico.";
+const categoryDetails = [
+  { icon: "heart", short: "Sua saúde", text: "Um plano para você, sua família ou seu time.", title: "Planos de Saúde para cada momento", image: "humana.webp", alt: "Uma conversa atenciosa sobre necessidades de saúde" },
+  { icon: "company", short: "Sua empresa", text: "Cuidado com as pessoas e o seu negócio.", title: "Seu negócio também merece cuidado", image: "empresas.webp", alt: "Empresários conversando com uma consultora" },
+  { icon: "people", short: "Sua vida", text: "Proteção para o que faz parte da sua rotina.", title: "Para a vida que acontece todos os dias", image: "contemporanea.webp", alt: "Profissional seguindo sua rotina com tranquilidade" },
+  { icon: "plan", short: "Seus planos", text: "Caminhos para tirar seus projetos do papel.", title: "Vamos planejar seu próximo passo", image: "consultiva.webp", alt: "Conversa sobre planejamento e possibilidades financeiras" },
+];
 
-function Arrow() {
-  return <span aria-hidden="true">↗</span>;
-}
+const journey = [
+  { name: "Equipe Comercial", title: "A gente conhece você", text: "Ouvimos suas prioridades e comparamos as opções de plano que fazem sentido para o seu momento." },
+  { name: "Implantação", title: "Organizamos os primeiros passos", text: "Acompanhamos o cadastro, a análise e a vigência do plano. Você sabe o que falta e quando começa." },
+  { name: "Avaliação de Sucesso", title: "Ficamos por perto desde o início", text: "Nos primeiros 90 dias, acompanhamos suas dúvidas, o envio de boletos e a adaptação ao plano." },
+  { name: "Gestão de Conta", title: "Você tem alguém para chamar", text: "Um agente de relacionamento específico cuida das movimentações e das tratativas com a operadora durante toda a vigência." },
+  { name: "Setor de Qualidade", title: "O cuidado segue com você", text: "Orientamos sobre reajustes e acompanhamos a qualidade do suporte para que sua conta continue bem cuidada." },
+];
 
-function SocialIcon({ network }: { network: "instagram" | "linkedin" }) {
-  if (network === "instagram") {
-    return <svg className="instagram-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="2.75" y="2.75" width="18.5" height="18.5" rx="5.3" /><circle cx="12" cy="12" r="4.25" /><circle cx="17.45" cy="6.65" r="1.15" fill="currentColor" stroke="none" /></svg>;
-  }
-  return <svg className="linkedin-icon" viewBox="0 0 24 24" aria-hidden="true"><rect className="linkedin-mark" x="2.5" y="2.5" width="19" height="19" rx="2.2" /><path className="linkedin-letter" d="M7.25 10.2v6.6M7.25 7.15v.15M10.75 16.8v-6.6M10.75 13.05c.5-1.85 5-2.15 5 1.2v2.55" /></svg>;
-}
+const support = [
+  { icon: "shield", name: "Gestão de Sinistro", title: "Aconteceu um imprevisto? Estamos com você.", text: "Do aviso à resolução, seu agente acompanha o sinistro e faz a ponte com a seguradora. Você tem orientação em cada etapa." },
+  { icon: "people", name: "Acompanhamento de Conta PJ Saúde", title: "Mais apoio para quem cuida da equipe.", text: "Cuidamos de inclusões, exclusões e alterações, conferência de faturamento, boletos e projeção de custos. Também auxiliamos nos pedidos de liberação junto às operadoras." },
+  { icon: "plan", name: "Reversão de Reajuste", title: "O reajuste veio diferente do esperado?", text: "Analisamos as condições e damos suporte técnico para contestar e negociar reajustes considerados abusivos ou fora do padrão, quando cabível." },
+  { icon: "document", name: "Suporte Jurídico", title: "Clareza também nas questões mais difíceis.", text: "Retaguarda jurídica para orientar questões contratuais e regulatórias relacionadas aos planos e às apólices contratadas." },
+];
 
 export default function Home() {
   const [activeProduct, setActiveProduct] = useState(0);
-  const slideRef = useRef<HTMLElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [partnerGroup, setPartnerGroup] = useState(0);
+  const touchStart = useRef<number | null>(null);
   const product = products[activeProduct];
-  const selectProduct = (index: number) => { setActiveProduct(index); slideRef.current?.focus(); };
+  const categoryIndex = categories.indexOf(product.category);
+  const detail = categoryDetails[categoryIndex];
+  const categoryProducts = products.map((item, index) => ({ ...item, index })).filter(item => item.category === product.category);
+  const position = categoryProducts.findIndex(item => item.index === activeProduct);
+  const goToProduct = (offset: number) => setActiveProduct(categoryProducts[(position + offset + categoryProducts.length) % categoryProducts.length].index);
+  const selectCategory = (index: number) => setActiveProduct(products.findIndex(item => item.category === categories[index]));
+  const jumpToSolutions = (index: number) => { selectCategory(index); setMenuOpen(false); };
+
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const root = document.documentElement;
     root.classList.add("reveal-ready");
-    const elements = Array.from(document.querySelectorAll<HTMLElement>("[data-reveal]"));
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("is-visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -7% 0px" },
-    );
-    elements.forEach((element) => observer.observe(element));
-    return () => {
-      observer.disconnect();
-      root.classList.remove("reveal-ready");
-    };
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (entry.isIntersecting) { entry.target.classList.add("is-visible"); observer.unobserve(entry.target); }
+    }), { threshold: .08 });
+    document.querySelectorAll("[data-reveal]").forEach(element => observer.observe(element));
+    return () => { observer.disconnect(); root.classList.remove("reveal-ready"); };
   }, []);
 
-  return (
-    <main>
-      <header className="site-header">
-        <a className="brand" href="#inicio" aria-label="Riseseg — início">
-          <img src="rise-seg/logo-riseseg-v21.png" alt="Riseseg — Corretora de Seguros e Finanças" />
-        </a>
-        <nav aria-label="Navegação principal">
-          <a href="#planos-de-saude">Planos de Saúde</a><a href="#solucoes">Soluções</a><a href="#jornada">Pós-contratação</a><a href="#especialistas">Especialistas</a>
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setMenuOpen(false); };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, []);
+
+  return <>
+    <a className="skip-link" href="#conteudo">Ir para o conteúdo</a>
+    <div className="top-note"><div className="container"><span>Cuidar de você é o que nos move.</span><span><Icon name="globe"/> Atendimento em todo o Brasil</span></div></div>
+    <header className="site-header">
+      <div className="container header-inner">
+        <a className="brand" href="#inicio" aria-label="Riseseg — início"><Brand/></a>
+        <nav className={menuOpen ? "main-nav is-open" : "main-nav"} id="menu-principal" aria-label="Navegação principal">
+          <a href="#solucoes" onClick={() => jumpToSolutions(0)}>Planos de Saúde</a><a href="#solucoes" onClick={() => setMenuOpen(false)}>Seguros e soluções</a><a href="#especialistas" onClick={() => setMenuOpen(false)}>Quem cuida de você</a><a href="#jornada" onClick={() => setMenuOpen(false)}>Depois do “sim”</a>
         </nav>
-        <a className="header-cta" href={whatsappGuilherme} target="_blank" rel="noreferrer">Falar com especialista <Arrow /></a>
-      </header>
+        <a className="button header-cta" href={whatsappLink()} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp"/> Vamos conversar</a>
+        <button className="menu-toggle" type="button" aria-label={menuOpen ? "Fechar menu" : "Abrir menu"} aria-expanded={menuOpen} aria-controls="menu-principal" onClick={() => setMenuOpen(!menuOpen)}><span/><span/><span/></button>
+      </div>
+    </header>
 
+    <main id="conteudo">
       <section className="hero" id="inicio">
-        <div className="hero-copy" data-reveal>
-          <p className="eyebrow"><span>Seguros · Saúde · Serviços financeiros</span></p>
-          <h1>Proteção para continuar avançando.</h1>
-          <p className="hero-pivot">Segurança para decidir. Direção para cada nova fase.</p>
-          <p className="hero-description">A Riseseg reúne soluções para empresas, pessoas e famílias com um atendimento que explica o porquê de cada recomendação — sem jargão e sem pressa para fechar.</p>
-          <p className="coverage-line">✦ Atendimento em todo o Brasil</p>
-          <div className="hero-actions">
-            <a className="primary-cta" href={whatsappGuilherme} target="_blank" rel="noreferrer">Começar meu diagnóstico <Arrow /></a>
-            <span>Atendimento direto pelo WhatsApp</span>
+        <div className="container hero-grid">
+          <div className="hero-copy" data-reveal>
+            <p className="eyebrow">Planos de Saúde, seguros e cuidado de verdade</p>
+            <h1>Cuide de quem importa.<br/><em>A gente cuida com você.</em></h1>
+            <p className="hero-description">Sua família, sua empresa, seus planos. A gente escuta o que você precisa, explica as opções e acompanha você em cada escolha.</p>
+            <div className="hero-actions"><a className="button" href={whatsappLink()} target="_blank" rel="noopener noreferrer">Conversar com a Riseseg <Icon name="arrow"/></a><a className="text-link" href="#solucoes">Encontrar minha solução</a></div>
+            <div className="hero-people"><div className="avatar-pair"><img src="rise-seg/isabela.webp" alt="" width="44" height="44"/><img src="rise-seg/guilherme.webp" alt="" width="44" height="44"/></div><p><strong>Tem gente de verdade do outro lado.</strong><span>Uma conversa no WhatsApp, no seu tempo.</span></p></div>
           </div>
-        </div>
-        <div className="hero-visual" aria-label="Atendimento consultivo Riseseg">
-          <img src="rise-seg/hero-riseseg-original.png" alt="Especialista orientando empresários em uma conversa consultiva" />
-          <div className="hero-stamp"><span>Nosso ponto de partida</span><strong>Ouvir antes de recomendar.</strong></div>
-          <p className="vertical-note">Tecnologia que facilita · Pessoas que orientam</p>
+          <div className="hero-visual" data-reveal><img className="hero-photo" src="rise-seg/familia-riseseg.webp" alt="Família compartilhando um momento de carinho em casa" width="1400" height="933" fetchPriority="high"/><div className="hero-photo-note"><span className="icon-disc"><Icon name="heart"/></span><p>Para viver os seus dias<br/><strong>com mais tranquilidade.</strong></p></div></div>
         </div>
       </section>
 
-      <section className="trust-rail" aria-label="Diferenciais Riseseg">
-        <p data-reveal><span>01</span><strong>Você fala com pessoas</strong>Uma conversa, não um script.</p>
-        <p data-reveal><span>02</span><strong>Você entende a escolha</strong>Coberturas e condições em português claro.</p>
-        <p data-reveal><span>03</span><strong>Você segue acompanhado</strong>Presença antes, durante e depois.</p>
+      <section className="welcome-paths container" aria-labelledby="paths-heading">
+        <div className="paths-heading" data-reveal><p className="eyebrow">Cada momento pede um cuidado</p><h2 id="paths-heading">O que você quer cuidar hoje?</h2></div>
+        <div className="path-grid">{categoryDetails.map((item, index) => <a key={item.short} href="#solucoes" onClick={() => jumpToSolutions(index)} className="path-card" data-reveal><span className="icon-disc"><Icon name={item.icon}/></span><h3>{item.short}</h3><p>{item.text}</p><span className="path-link">{categories[index]} <Icon name="arrow"/></span></a>)}</div>
       </section>
 
-      <section className="manifesto" id="jeito-riseseg" data-reveal>
-        <div className="section-label"><span>O jeito Riseseg</span><small>O conselheiro ao seu lado</small></div>
-        <div className="manifesto-content"><p className="lead">Você merece um conselheiro, não um vendedor.</p><p>Antes de falar de preço, entendemos o seu momento. Depois, comparamos possibilidades e mostramos o que cada escolha significa na prática. A decisão continua sendo sua — agora com clareza.</p></div>
-      </section>
-
-      <section className="solutions" id="solucoes">
-        <div className="solutions-heading" data-reveal>
-          <p className="eyebrow"><span>Portfólio completo</span></p>
-          <h2>Um só parceiro para proteger e avançar.</h2>
-          <p>Planos de Saúde para cada momento, seguros para empresas e pessoas e serviços financeiros. Explore as opções; as coberturas finais dependem da proposta e do contrato.</p>
-        </div>
-        <div id="planos-de-saude" className="product-browser" data-reveal>
-          <h3 className="browser-title">{product.category === "Planos de Saúde" ? "Planos de Saúde para cada momento" : product.category}</h3>
-          <div className="category-tabs" role="group" aria-label="Ramos de atuação">
-            {categories.map((category) => <button key={category} type="button" className={category === product.category ? "active" : ""} onClick={() => selectProduct(products.findIndex((item) => item.category === category))}>{category}</button>)}
-          </div>
-          <div className="product-layout">
-            <div className="product-index" aria-label="Produtos do ramo">
-              {products.map((item, index) => item.category === product.category && <button key={item.name} type="button" className={index === activeProduct ? "active" : ""} onClick={() => selectProduct(index)}>{item.name}<span aria-hidden="true">↗</span></button>)}
+      <section className="solutions section" id="solucoes">
+        <div className="container">
+          <div className="section-heading" data-reveal><p className="eyebrow">Escolhas que fazem sentido para você</p><h2>Proteção para a sua vida.<br/>Opções para os seus planos.</h2><p>Encontre o que procura. A gente ajuda você a entender os detalhes e escolher com segurança.</p></div>
+          <div className="category-tabs" role="group" aria-label="Áreas de atuação">{categories.map((category, index) => <button key={category} type="button" aria-pressed={categoryIndex === index} onClick={() => selectCategory(index)}><Icon name={categoryDetails[index].icon}/>{category}</button>)}</div>
+          <div className="product-browser" aria-roledescription="carrossel" aria-label="Soluções da Riseseg" onTouchStart={event => { touchStart.current = event.touches[0].clientX; }} onTouchEnd={event => { if (touchStart.current !== null) { const distance = event.changedTouches[0].clientX - touchStart.current; if (Math.abs(distance) > 60) goToProduct(distance < 0 ? 1 : -1); } touchStart.current = null; }}>
+            <div className={`product-image category-${categoryIndex}`}><img src={`rise-seg/${detail.image}`} alt={detail.alt} width="800" height="900" loading="lazy"/><div><Icon name={detail.icon}/><h3>{detail.title}</h3></div></div>
+            <div className="product-main">
+              <label className="product-picker">Qual solução você procura?<select value={activeProduct} onChange={event => setActiveProduct(Number(event.target.value))}>{categoryProducts.map(item => <option key={item.index} value={item.index}>{item.name}</option>)}</select></label>
+              <article key={product.name} className="product-slide" aria-live="polite" aria-atomic="true"><p className="eyebrow">{product.category}</p><h3>{product.name}</h3><p className="product-description">{product.description}</p><p className="product-audience"><Icon name="people"/>{product.audience}</p><h4>O que pode incluir</h4><ul className="check-list">{product.includes.map(item => <li key={item}><Icon name="check"/>{item}</li>)}</ul><a className="button" href={whatsappLink(`Quero saber mais sobre ${product.name}.`, categoryIndex === 0)} target="_blank" rel="noopener noreferrer">Falar com especialista <Icon name="arrow"/></a></article>
+              <div className="carousel-navigation"><span>{position + 1} de {categoryProducts.length} soluções neste ramo</span><div><button type="button" aria-label="Produto anterior" onClick={() => goToProduct(-1)}><Icon className="arrow-back" name="arrow"/></button><button type="button" aria-label="Próximo produto" onClick={() => goToProduct(1)}><Icon name="arrow"/></button></div></div>
+              <p className="product-note">Disponibilidade, coberturas e condições variam conforme a proposta e o contrato. Vamos explicar tudo antes de você decidir.</p>
             </div>
-            <article className="product-slide" ref={slideRef} tabIndex={-1} aria-live="polite">
-              <div className="product-slide-top"><span>{product.category}</span><span>{String(activeProduct + 1).padStart(2, "0")} / {products.length}</span></div>
-              <h3>{product.name}</h3><p className="product-description">{product.description}</p><p className="product-audience">{product.audience}</p>
-              <h4>O que pode incluir</h4><ul>{product.includes.map((feature) => <li key={feature}>{feature}</li>)}</ul>
-              <div className="product-actions"><a href={whatsappGuilherme} target="_blank" rel="noreferrer">Falar com especialista <Arrow /></a><div><button type="button" aria-label="Produto anterior" onClick={() => selectProduct((activeProduct - 1 + products.length) % products.length)}>←</button><button type="button" aria-label="Próximo produto" onClick={() => selectProduct((activeProduct + 1) % products.length)}>→</button></div></div>
-            </article>
           </div>
         </div>
       </section>
 
-      <section className="principles" aria-label="Princípios de atendimento">
-        <article className="principle principle-human">
-          <div className="principle-image"><img src="rise-seg/humana.jpg" alt="Atendimento humano e próximo" /></div>
-          <div className="principle-copy" data-reveal><span>Humanização</span><h2>Você não é um número de apólice.</h2><p>Seu contexto vem antes do produto. Cada recomendação é construída para o que realmente importa proteger agora.</p></div>
-        </article>
-        <article className="principle principle-consultive">
-          <div className="principle-image"><img src="rise-seg/consultiva.jpg" alt="Análise consultiva de opções de seguro" /></div>
-          <div className="principle-copy" data-reveal><span>Clareza</span><h2>Você entende o que está contratando.</h2><p>Coberturas, exclusões e valores explicados antes da assinatura. Se ficou uma dúvida, a gente explica de novo.</p></div>
-        </article>
-        <article className="principle principle-modern">
-          <div className="principle-image"><img src="rise-seg/contemporanea.jpg" alt="Profissional usando o celular em ambiente corporativo contemporâneo" /></div>
-          <div className="principle-copy" data-reveal><span>Compromisso</span><h2>O trabalho não termina na assinatura.</h2><p>Seguimos presentes na renovação, nos ajustes de cobertura e no momento em que você mais precisa de orientação.</p></div>
-        </article>
+      <section className="experts section container" id="especialistas">
+        <div className="experts-intro" data-reveal><p className="eyebrow">Conheça quem conversa com você</p><h2>Seu atendimento<br/>tem nome e rosto.</h2><p>Por trás de cada indicação, tem alguém que escuta suas dúvidas e entende seu momento.</p><p>Comece contando o que você procura. A Isa e o Gui ajudam a transformar tantas opções em uma escolha mais clara.</p><a className="text-link" href={whatsappLink()} target="_blank" rel="noopener noreferrer">Vamos conversar? <Icon name="arrow"/></a></div>
+        <div className="expert-cards"><article data-reveal><div className="expert-portrait portrait-isa"><img src="rise-seg/isabela.webp" alt="Isabela Ribeiro" width="640" height="640" loading="lazy"/></div><div><h3>Isabela Ribeiro</h3><p>Especialista em seguro saúde</p></div></article><article data-reveal><div className="expert-portrait portrait-gui"><img src="rise-seg/guilherme.webp" alt="Guilherme Alves" width="750" height="1000" loading="lazy"/></div><div><h3>Guilherme Alves</h3><p>Head Comercial</p></div></article></div>
       </section>
 
-      <section className="process">
-        <div className="process-heading" data-reveal><p className="eyebrow"><span>Como funciona sua cotação</span></p><h2>Um método claro por trás de cada proposta.</h2></div>
-        <ol>
-          <li data-reveal><span>01</span><div><h3>Diagnóstico</h3><p>Entendemos o que mudou, os riscos do seu momento e o que já está protegido.</p></div></li>
-          <li data-reveal><span>02</span><div><h3>Comparação</h3><p>Buscamos condições e combinações de cobertura e custo adequadas ao seu caso.</p></div></li>
-          <li data-reveal><span>03</span><div><h3>Recomendação</h3><p>Apresentamos a opção indicada com o porquê — não uma lista de PDFs para você decifrar.</p></div></li>
-          <li data-reveal><span>04</span><div><h3>Contratação e acompanhamento</h3><p>Cuidamos da papelada e seguimos ao seu lado em ajustes, renovação e sinistro.</p></div></li>
-        </ol>
-      </section>
+      <section className="our-way section" id="jeito-riseseg"><div className="container our-way-grid"><div className="our-way-photo" data-reveal><img src="rise-seg/consultiva.webp" alt="Consultora explicando opções em uma conversa próxima" width="800" height="1000" loading="lazy"/><span>Primeiro, a gente escuta.</span></div><div data-reveal><p className="eyebrow">O jeito Riseseg de cuidar</p><h2>A melhor escolha começa<br/>com uma boa conversa.</h2><p>Escolher um plano ou um seguro pode trazer muitas perguntas. Sobre preço, sobre cobertura, sobre o que acontece depois. Aqui, elas têm espaço.</p><div className="values-list"><div><span className="icon-disc"><Icon name="chat"/></span><div><h3>Você é ouvido</h3><p>Seu contexto vem antes do produto. A recomendação começa pelo que importa para você.</p></div></div><div><span className="icon-disc"><Icon name="document"/></span><div><h3>Você entende a escolha</h3><p>Rede, cobertura, carência e condições explicadas em uma linguagem que faz sentido.</p></div></div><div><span className="icon-disc"><Icon name="heart"/></span><div><h3>Você segue acompanhado</h3><p>A gente continua por perto nos ajustes, na renovação e quando surge um imprevisto.</p></div></div></div></div></div></section>
 
-      <section className="aftercare" id="jornada">
-        <div className="aftercare-heading" data-reveal><p className="eyebrow"><span>Presença depois da contratação</span></p><h2>Como cuidamos de você depois do “sim”.</h2><p>Uma jornada acompanhada, com responsabilidades claras em cada etapa.</p></div>
-        <ol className="journey-list">
-          <li data-reveal><span>01</span><div><h3>Equipe Comercial</h3><p>Consultoria para qualificar necessidades e indicar a melhor opção de plano.</p></div></li>
-          <li data-reveal><span>02</span><div><h3>Implantação</h3><p>Cadastro, acompanhamento, análise e confirmação da vigência.</p></div></li>
-          <li data-reveal><span>03</span><div><h3>Avaliação de Sucesso</h3><p>Acompanhamento por 90 dias para dúvidas, boletos e primeiros ajustes.</p></div></li>
-          <li data-reveal><span>04</span><div><h3>Gestão de Conta</h3><p>Um agente de relacionamento específico acompanha você durante todo o contrato, cuidando de movimentações cadastrais, tratativas com operadoras e auxílios pontuais.</p></div></li>
-          <li data-reveal><span>05</span><div><h3>Setor de Qualidade</h3><p>Informações sobre reajustes e suporte para manter a qualidade do atendimento.</p></div></li>
-        </ol>
-      </section>
+      <section className="aftercare section" id="jornada"><div className="container"><div className="section-heading" data-reveal><p className="eyebrow">Cuidado que continua</p><h2>Como cuidamos de você<br/>depois do “sim”.</h2><p>Na contratação do seu plano de saúde, cada etapa tem uma equipe responsável. E a relação continua ao longo do contrato.</p></div><ol className="journey-list">{journey.map((step, index) => <li key={step.name} data-reveal><span className="step-number">{index + 1}</span><p className="step-label">{step.name}</p><h3>{step.title}</h3><p>{step.text}</p></li>)}</ol><div className="relationship-note" data-reveal><span className="icon-disc"><Icon name="chat"/></span><div><h3>Alguém que conhece você e a sua conta.</h3><p>A partir da Gestão de Conta, você tem um agente de relacionamento específico para acompanhar suas necessidades durante toda a vigência do contrato.</p></div></div></div></section>
 
-      <section className="ongoing-care">
-        <div data-reveal><p className="eyebrow"><span>Quando você precisa de nós</span></p><h2>Suporte que continua presente.</h2></div>
-        <div className="care-grid">
-          <article data-reveal><span>01</span><h3>Gestão de Sinistro</h3><p>Intermediação com a seguradora e acompanhamento da solicitação até a resolução.</p></article>
-          <article data-reveal><span>02</span><h3>Acompanhamento de Conta PJ Saúde</h3><p>Inclusões, exclusões e alterações cadastrais; conferência de cobrança e boletos, projeção de custos e auxílio em pedidos de autorização.</p></article>
-          <article data-reveal><span>03</span><h3>Reversão de Reajuste</h3><p>Apoio técnico para analisar, contestar ou negociar reajustes de planos de saúde considerados anormais ou abusivos, quando cabível.</p></article>
-          <article data-reveal><span>04</span><h3>Suporte Jurídico</h3><p>Apoio em questões contratuais e regulatórias relacionadas às soluções contratadas, conforme a situação.</p></article>
-        </div>
-      </section>
+      <section className="ongoing-care section container"><div className="section-heading" data-reveal><p className="eyebrow">Apoio para a vida real</p><h2>Quando precisar,<br/>você sabe com quem contar.</h2></div><div className="care-grid">{support.map(item => <article key={item.name} data-reveal><span className="icon-disc"><Icon name={item.icon}/></span><p className="care-label">{item.name}</p><h3>{item.title}</h3><p>{item.text}</p></article>)}</div></section>
 
-      <section className="experts" id="especialistas">
-        <div className="experts-intro" data-reveal><p className="eyebrow"><span>Atendimento direto</span></p><h2>Do outro lado, alguém que conhece o assunto.</h2><p>Pessoas preparadas para ouvir, explicar e orientar cada decisão.</p></div>
-        <div className="expert-cards">
-          <article data-reveal><div className="expert-portrait"><img src="rise-seg/foto-gui.jpeg" alt="Guilherme Alves" /></div><p><strong>Guilherme Alves</strong><span>Head Comercial</span></p></article>
-          <article data-reveal><div className="expert-portrait"><img src="rise-seg/foto-isa.jpeg" alt="Isabela Ribeiro" /></div><p><strong>Isabela Ribeiro</strong><span>Especialista em seguro saúde</span></p></article>
-        </div>
-      </section>
+      <section className="partners section" aria-labelledby="partners-heading"><div className="container"><div className="section-heading" data-reveal><p className="eyebrow">Operadoras e seguradoras parceiras</p><h2 id="partners-heading">Boas opções. Escolhas bem cuidadas.</h2></div><div className="partner-tabs" role="group" aria-label="Tipos de parceiros">{partnerGroups.map((group, index) => <button key={group.name} type="button" aria-pressed={partnerGroup === index} onClick={() => setPartnerGroup(index)}>{group.name}</button>)}</div><div className="partner-grid">{partnerGroups[partnerGroup].brands.map(brand => <div key={brand.name} className={brand.name === "Omint" ? "partner-negative" : undefined} title={brand.name}><img src={`rise-seg/partners/${brand.file}`} alt={brand.name} width="180" height="70" loading="lazy"/></div>)}</div></div></section>
 
-      <section className="faq" id="duvidas">
-        <div data-reveal><p className="eyebrow"><span>Antes de conversar</span></p><h2>Dúvidas comuns, respostas diretas.</h2></div>
-        <div className="faq-list" data-reveal>
-          <details><summary>Como começa o atendimento?</summary><p>Você conta o que procura e a Riseseg começa pelo diagnóstico: entende seu momento, seus riscos e o que já está protegido.</p></details>
-          <details><summary>A Riseseg atende empresas e pessoas?</summary><p>Sim. O foco estratégico inclui soluções para empresas, além de saúde, seguros pessoais e serviços financeiros para pessoas e famílias.</p></details>
-          <details><summary>Posso revisar uma apólice antes da renovação?</summary><p>Sim. A revisão considera mudanças no seu risco, nas condições de mercado e na cobertura contratada antes de renovar no automático.</p></details>
-        </div>
-      </section>
+      <section className="faq section container" id="duvidas"><div data-reveal><p className="eyebrow">Pode perguntar</p><h2>Vamos tirar<br/>suas dúvidas?</h2><p>Se a sua pergunta não estiver aqui, a gente conversa.</p><a className="text-link" href={whatsappLink()} target="_blank" rel="noopener noreferrer">Perguntar no WhatsApp <Icon name="arrow"/></a></div><div className="faq-list" data-reveal><details><summary>Não sei qual plano ou seguro escolher. Vocês me ajudam?</summary><p>Sim. Começamos entendendo sua rotina, sua região, seu orçamento e o que você quer proteger. Depois, explicamos as opções e os pontos que merecem atenção. Você pode conversar com a gente mesmo sem ter um produto definido.</p></details><details><summary>Tenho CNPJ ou MEI. Posso contratar um plano para minha família?</summary><p>Existem planos empresariais para titulares e dependentes. A contratação depende das regras da operadora, da elegibilidade do CNPJ e da composição do grupo. A equipe verifica essas condições com você.</p></details><details><summary>Vocês atendem fora de São Paulo?</summary><p>Sim. A Riseseg atende em todo o Brasil. A disponibilidade das soluções e da rede de atendimento é avaliada conforme a sua região e o produto.</p></details><details><summary>Depois de contratar, com quem eu falo?</summary><p>Na jornada do plano de saúde, acompanhamos a implantação e os primeiros 90 dias. A partir da Gestão de Conta, um agente de relacionamento específico acompanha você durante toda a vigência e ajuda nas tratativas com a operadora.</p></details><details><summary>Posso revisar o que já tenho contratado?</summary><p>Sim. Podemos analisar o plano ou a apólice atual, entender o que mudou na sua vida e comparar possibilidades antes de uma renovação ou de uma nova contratação.</p></details></div></section>
 
-      <section className="final-cta" data-reveal>
-        <p>Segurança para decidir. Direção para avançar.</p><h2>Vamos começar pelo seu diagnóstico?</h2>
-        <a href={whatsappGuilherme} target="_blank" rel="noreferrer">Falar com a Riseseg <Arrow /></a><span>Sem formulário. Atendimento direto pelo WhatsApp.</span>
-      </section>
-
-      <section className="contact-section" id="contato" data-reveal><div><p className="eyebrow"><span>Contato</span></p><h2>Vamos conversar?</h2><p>Atendimento em todo o Brasil, com uma equipe próxima quando você precisa.</p></div><address>Rua Jurubatuba, 1350, Sala 911 — Centro<br />São Bernardo do Campo - SP<br /><a href="mailto:atendimento@riseseg.com">atendimento@riseseg.com</a></address></section>
-
-      <footer>
-        <a className="footer-logo" href="#inicio" aria-label="Riseseg — voltar ao início"><img src="rise-seg/logo-riseseg-v21.png" alt="Riseseg — Corretora de Seguros e Finanças" /></a>
-        <nav aria-label="Navegação do rodapé"><a href="#planos-de-saude">Planos de Saúde</a><a href="#solucoes">Soluções</a><a href="#jornada">Pós-contratação</a><a href="contato.html">Contato</a><a className="social-link" href="https://www.instagram.com/riseseg/" target="_blank" rel="noreferrer" aria-label="Instagram da Riseseg"><SocialIcon network="instagram" /></a><a className="social-link" href="https://www.linkedin.com/company/riseseg-corretora-de-seguros/home/" target="_blank" rel="noreferrer" aria-label="LinkedIn da Riseseg"><SocialIcon network="linkedin" /></a></nav>
-        <p>Proteção para continuar avançando. <span className="footer-coverage">Atendimento em todo o Brasil</span></p>
-      </footer>
-
-      <a className="mobile-cta" href={whatsappGuilherme} target="_blank" rel="noreferrer">Falar no WhatsApp <Arrow /></a>
+      <section className="final-cta container" data-reveal><div><p className="eyebrow">Comece do seu jeito</p><h2>Conte o que importa para você.<br/>Vamos cuidar disso juntos.</h2><p>Uma boa conversa já pode deixar o próximo passo mais claro.</p></div><a className="button" href={whatsappLink()} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp"/> Conversar com a Riseseg</a></section>
     </main>
-  );
+
+    <footer className="site-footer"><div className="container"><div className="footer-main"><div><a className="footer-brand" href="#inicio" aria-label="Riseseg — voltar ao início"><Brand light/></a><p>Cuidado próximo para a sua família,<br/>sua empresa e os seus planos.</p><span className="coverage-badge"><Icon name="globe"/> Atendimento em todo o Brasil</span></div><div className="footer-links"><h2>Encontre seu caminho</h2><a href="#solucoes" onClick={() => selectCategory(0)}>Planos de Saúde</a><a href="#solucoes">Seguros e soluções</a><a href="#especialistas">Nossa equipe</a><a href="#jornada">Depois do “sim”</a></div><div className="footer-contact"><h2>Estamos por aqui</h2><a href="mailto:atendimento@riseseg.com"><Icon name="mail"/> atendimento@riseseg.com</a><address><Icon name="location"/><span>Rua Jurubatuba, 1350, Sala 911 — Centro<br/>São Bernardo do Campo - SP</span></address><a className="footer-contact-link" href="contato.html">Ver página de contato <Icon name="arrow"/></a><SocialLinks/></div></div><div className="footer-bottom"><p>© {new Date().getFullYear()} Riseseg. Todos os direitos reservados.</p><span>Proteção para continuar avançando.</span></div></div></footer>
+    <a className="floating-whatsapp" href={whatsappLink()} target="_blank" rel="noopener noreferrer" aria-label="Conversar com a Riseseg no WhatsApp"><Icon name="whatsapp"/></a>
+  </>;
 }
