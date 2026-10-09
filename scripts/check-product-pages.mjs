@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { resolve, dirname } from "node:path";
+import { createHash } from "node:crypto";
 import { products } from "../app/products.ts";
 
 const root = resolve("dist/client");
@@ -9,6 +10,12 @@ const slugs = new Map([...source.matchAll(/"([^"]+)": \{\s+slug: "([^"]+)"/g)].m
 const home = readFileSync(resolve(root, "index.html"), "utf8");
 const escapeHtml = text => text.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#x27;");
 assert.equal(slugs.size, products.length, "Every product must have a presentation");
+const images = [...source.matchAll(/"([^"]+)": \{\s+slug: "([^"]+)"[\s\S]*?image: "([^"]+)"/g)];
+assert.equal(new Set(images.map(match => match[3])).size, products.length, "Every solution needs a unique photo path");
+const imageHashes = images.map(match => createHash("sha256").update(readFileSync(resolve(root, "rise-seg", match[3]))).digest("hex"));
+assert.equal(new Set(imageHashes).size, products.length, "Different filenames must not reuse the same photo");
+assert.ok(home.includes('Saiba mais'), "Homepage needs the new CTA");
+assert.ok(!home.includes('Falar com especialista'), "Old CTA remains on homepage");
 
 for (const product of products) {
   const slug = slugs.get(product.name);
@@ -16,6 +23,9 @@ for (const product of products) {
   assert.ok(existsSync(filename), `Missing export: ${slug}`);
   const html = readFileSync(filename, "utf8");
   assert.equal([...html.matchAll(/<h1(?:\s[^>]*)?>/g)].length, 1, `${slug}: exactly one h1`);
+  assert.ok(!html.includes('Falar com especialista'), `${slug}: old CTA remains`);
+  assert.ok(html.includes('Antes de escolher'), `${slug}: context missing from details`);
+  assert.ok(!html.includes('<section class="solution-context'), `${slug}: detached context strip remains`);
   for (const text of [product.name, product.description, product.audience, ...product.includes]) {
     assert.ok(html.includes(escapeHtml(text)), `${slug}: missing original information: ${text}`);
   }

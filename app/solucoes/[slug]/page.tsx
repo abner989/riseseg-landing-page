@@ -42,7 +42,7 @@ export default async function ProductPage({ params }: Props) {
     <header className="site-header solution-header"><div className="container header-inner">
       <a className="brand" href="../" aria-label="Riseseg — início"><Brand assetBase="../rise-seg"/></a>
       <a className="text-link solution-back" href="../#solucoes"><Icon className="arrow-back" name="arrow"/> Todas as soluções</a>
-      <a className="button solution-header-cta" href={chat} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp"/> Falar com especialista</a>
+      <a className="button solution-header-cta" href="#detalhes">Saiba mais <Icon name="arrow"/></a>
     </div></header>
 
     <main id="conteudo">
@@ -54,7 +54,7 @@ export default async function ProductPage({ params }: Props) {
               <p className="eyebrow">{product.category} · {product.name}</p>
               <h1>{product.headline}</h1>
               <p className="solution-intro">{product.intro}</p>
-              <div className="solution-actions"><a className="button" href={chat} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp"/> Falar com especialista</a><a className="text-link" href="#detalhes">Entender as opções <Icon name="arrow"/></a></div>
+              <div className="solution-actions"><a className="button" href="#detalhes">Saiba mais <Icon name="arrow"/></a><a className="text-link" href={chat} target="_blank" rel="noopener noreferrer"><Icon name="whatsapp"/> Conversar no WhatsApp</a></div>
               <p className="solution-microcopy">Uma conversa com {specialist.first}, sem precisar ter todas as respostas.</p>
             </div>
             <figure className="solution-hero-photo" data-reveal><img src={`../rise-seg/${product.image}`} alt={product.alt} style={{ objectPosition: product.photoPosition }} width="1400" height="933" fetchPriority="high"/><figcaption>Primeiro, o que importa para você.</figcaption></figure>
@@ -62,13 +62,12 @@ export default async function ProductPage({ params }: Props) {
         </div>
       </section>
 
-      <section className="solution-context container" data-reveal><p className="eyebrow">Uma escolha que começa por você</p><p>{product.context}</p></section>
-
       <section className="solution-details section" id="detalhes"><div className="container solution-details-grid">
         <article className="solution-existing" data-reveal>
           <p className="eyebrow">Conheça a solução</p><h2>{product.name}</h2>
           <p className="product-description">{product.description}</p>
           <p className="product-audience"><Icon name="people"/>{product.audience}</p>
+          <div className="solution-context"><h3>Antes de escolher</h3><p>{product.context}</p></div>
           <h3>{financial ? "O que vamos avaliar com você" : "O que pode incluir"}</h3>
           <ul className="check-list">{product.includes.map(item => <li key={item}><Icon name="check"/>{item}</li>)}</ul>
           <p className="product-note">Disponibilidade, coberturas e condições variam conforme a proposta e o contrato. Vamos explicar tudo antes de você decidir.</p>

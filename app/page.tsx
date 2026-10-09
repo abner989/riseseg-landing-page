@@ -7,10 +7,10 @@ import { Brand, Icon, SocialLinks, whatsappLink } from "./ui";
 import { partnerGroups } from "./partners";
 
 const categoryDetails = [
-  { icon: "heart", short: "Sua saúde", text: "Um plano para você, sua família ou seu time.", title: "Planos de Saúde para cada momento", image: "humana.webp", alt: "Uma conversa atenciosa sobre necessidades de saúde" },
-  { icon: "company", short: "Sua empresa", text: "Cuidado com as pessoas e o seu negócio.", title: "Seu negócio também merece cuidado", image: "empresas.webp", alt: "Empresários conversando com uma consultora" },
-  { icon: "people", short: "Sua vida", text: "Proteção para o que faz parte da sua rotina.", title: "Para a vida que acontece todos os dias", image: "contemporanea.webp", alt: "Profissional seguindo sua rotina com tranquilidade" },
-  { icon: "plan", short: "Seus planos", text: "Caminhos para tirar seus projetos do papel.", title: "Vamos planejar seu próximo passo", image: "consultiva.webp", alt: "Conversa sobre planejamento e possibilidades financeiras" },
+  { icon: "heart", short: "Sua saúde", text: "Um plano para você, sua família ou seu time.", title: "Planos de Saúde para cada momento" },
+  { icon: "company", short: "Sua empresa", text: "Cuidado com as pessoas e o seu negócio.", title: "Seu negócio também merece cuidado" },
+  { icon: "people", short: "Sua vida", text: "Proteção para o que faz parte da sua rotina.", title: "Para a vida que acontece todos os dias" },
+  { icon: "plan", short: "Seus planos", text: "Caminhos para tirar seus projetos do papel.", title: "Vamos planejar seu próximo passo" },
 ];
 
 const journey = [
@@ -34,6 +34,7 @@ export default function Home() {
   const [partnerGroup, setPartnerGroup] = useState(0);
   const touchStart = useRef<number | null>(null);
   const product = products[activeProduct];
+  const productPresentation = productPages[activeProduct];
   const categoryIndex = categories.indexOf(product.category);
   const detail = categoryDetails[categoryIndex];
   const categoryProducts = products.map((item, index) => ({ ...item, index })).filter(item => item.category === product.category);
@@ -97,10 +98,10 @@ export default function Home() {
           <div className="section-heading" data-reveal><p className="eyebrow">Escolhas que fazem sentido para você</p><h2>Proteção para a sua vida.<br/>Opções para os seus planos.</h2><p>Encontre o que procura. A gente ajuda você a entender os detalhes e escolher com segurança.</p></div>
           <div className="category-tabs" role="group" aria-label="Áreas de atuação">{categories.map((category, index) => <button key={category} type="button" aria-pressed={categoryIndex === index} onClick={() => selectCategory(index)}><Icon name={categoryDetails[index].icon}/>{category}</button>)}</div>
           <div className="product-browser" aria-roledescription="carrossel" aria-label="Soluções da Riseseg" onTouchStart={event => { touchStart.current = event.touches[0].clientX; }} onTouchEnd={event => { if (touchStart.current !== null) { const distance = event.changedTouches[0].clientX - touchStart.current; if (Math.abs(distance) > 60) goToProduct(distance < 0 ? 1 : -1); } touchStart.current = null; }}>
-            <div className={`product-image category-${categoryIndex}`}><img src={`rise-seg/${detail.image}`} alt={detail.alt} width="800" height="900" loading="lazy"/><div><Icon name={detail.icon}/><h3>{detail.title}</h3></div></div>
+            <div className={`product-image category-${categoryIndex}`}><img key={productPresentation.image} src={`rise-seg/${productPresentation.image}`} alt={productPresentation.alt} style={{ objectPosition: productPresentation.photoPosition }} width="1400" height="933" loading="lazy"/><div><Icon name={detail.icon}/><h3>{detail.title}</h3></div></div>
             <div className="product-main">
               <label className="product-picker">Qual solução você procura?<select value={activeProduct} onChange={event => setActiveProduct(Number(event.target.value))}>{categoryProducts.map(item => <option key={item.index} value={item.index}>{item.name}</option>)}</select></label>
-              <article key={product.name} className="product-slide" aria-live="polite" aria-atomic="true"><p className="eyebrow">{product.category}</p><h3>{product.name}</h3><p className="product-description">{product.description}</p><p className="product-audience"><Icon name="people"/>{product.audience}</p><h4>O que pode incluir</h4><ul className="check-list">{product.includes.map(item => <li key={item}><Icon name="check"/>{item}</li>)}</ul><a className="button" href={productPageHref(product)} aria-label={`Falar com especialista sobre ${product.name}: conhecer a solução`}>Falar com especialista <Icon name="arrow"/></a></article>
+              <article key={product.name} className="product-slide" aria-live="polite" aria-atomic="true"><p className="eyebrow">{product.category}</p><h3>{product.name}</h3><p className="product-description">{product.description}</p><p className="product-audience"><Icon name="people"/>{product.audience}</p><h4>O que pode incluir</h4><ul className="check-list">{product.includes.map(item => <li key={item}><Icon name="check"/>{item}</li>)}</ul><a className="button" href={productPageHref(product)} aria-label={`Saiba mais sobre ${product.name}`}>Saiba mais <Icon name="arrow"/></a></article>
               <div className="carousel-navigation"><span>{position + 1} de {categoryProducts.length} soluções neste ramo</span><div><button type="button" aria-label="Produto anterior" onClick={() => goToProduct(-1)}><Icon className="arrow-back" name="arrow"/></button><button type="button" aria-label="Próximo produto" onClick={() => goToProduct(1)}><Icon name="arrow"/></button></div></div>
               <p className="product-note">Disponibilidade, coberturas e condições variam conforme a proposta e o contrato. Vamos explicar tudo antes de você decidir.</p>
             </div>

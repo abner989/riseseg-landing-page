@@ -25,7 +25,7 @@ const presentations: Record<string, Presentation> = {
     headline: "Seu CNPJ pode abrir um caminho para cuidar da família.",
     intro: "Você tem uma empresa ou é MEI? Vamos entender se um plano empresarial pode atender você e seus dependentes, conforme as regras da operadora.",
     context: "Cada família tem prioridades diferentes. Antes de comparar planos, olhamos quem precisa de atendimento, a região e as regras de elegibilidade. Assim, você conhece as possibilidades sem confundir preço com cuidado.",
-    image: "familia-riseseg.webp", alt: "Pais e filha compartilhando um momento de carinho em casa",
+    image: "produtos/saude-familiar.webp", alt: "Mãe e filho conversando com uma médica em uma sala de atendimento",
     conversation: "Conte quem deseja incluir no plano e qual é a situação do seu CNPJ ou MEI.",
   },
   "Coletivo Empresarial": {
@@ -33,7 +33,7 @@ const presentations: Record<string, Presentation> = {
     headline: "Cuidar da equipe também faz parte do seu negócio.",
     intro: "Um benefício de saúde começa nas pessoas que vão usá-lo. A Riseseg ajuda a comparar opções para seu time, com atenção à rede, ao orçamento e à gestão do plano.",
     context: "Da escolha à implantação, sua empresa precisa de clareza. Conversamos sobre o perfil dos colaboradores, explicamos as condições e acompanhamos os primeiros passos. Depois, o cuidado continua nas movimentações e nas tratativas com a operadora.",
-    image: "empresas.webp", alt: "Uma consultora e empresários conversando sobre o cuidado com a equipe",
+    image: "produtos/saude-empresarial.webp", alt: "Colaboradores conversando sobre cuidado e bem-estar no trabalho",
     conversation: "Conte quantas pessoas fazem parte do grupo e em quais cidades elas precisam de atendimento.",
   },
   "Seguro Odonto": {
@@ -41,7 +41,7 @@ const presentations: Record<string, Presentation> = {
     headline: "Mais espaço para cuidar do sorriso no dia a dia.",
     intro: "Para você, sua família ou seus colaboradores: vamos encontrar opções de cuidado odontológico e explicar o que cada plano oferece.",
     context: "Prevenção também merece planejamento. A gente ajuda você a conferir a rede de dentistas, os procedimentos previstos e as condições de utilização, para escolher sabendo o que poderá usar.",
-    image: "familia-riseseg.webp", alt: "Família sorrindo em um momento descontraído em casa",
+    image: "produtos/odonto.webp", alt: "Dentista explicando cuidados preventivos a uma paciente em um consultório",
     conversation: "Conte quem vai usar o plano e em qual região deseja encontrar dentistas.",
   },
   "Empresarial": {
@@ -105,7 +105,7 @@ const presentations: Record<string, Presentation> = {
     headline: "Seu time faz a empresa acontecer. Cuide de quem está com você.",
     intro: "O seguro de vida empresarial pode fazer parte do cuidado com seus colaboradores e suas famílias. Vamos entender o grupo e explicar as opções de proteção financeira.",
     context: "Um benefício precisa ser compreendido por quem contrata e por quem recebe. A Riseseg explica coberturas, elegibilidade e condições, ajudando sua empresa a avaliar uma solução alinhada às necessidades da equipe.",
-    image: "empresas.webp", alt: "Pessoas reunidas em uma conversa próxima no ambiente de trabalho",
+    image: "produtos/vida-empresarial.webp", alt: "Colaboradores de uma padaria compartilhando uma conversa durante a pausa",
     conversation: "Conte o tamanho da equipe e se já existe uma apólice para o grupo.",
   },
   "Automóvel": {
@@ -129,7 +129,7 @@ const presentations: Record<string, Presentation> = {
     headline: "Sua casa guarda muito mais do que objetos.",
     intro: "Ela guarda a sua rotina, suas conquistas e as pessoas que você ama. Conheça opções para proteger o imóvel e o que faz dele o seu lar.",
     context: "Casa ou apartamento, próprio ou alugado: o cuidado começa entendendo o espaço. Vamos conversar sobre estrutura, conteúdo e assistências disponíveis, sempre conferindo o que a proposta realmente prevê.",
-    image: "familia-riseseg.webp", alt: "Família aproveitando um momento de carinho no conforto de casa",
+    image: "produtos/residencia.webp", alt: "Casal cuidando das plantas no jardim da entrada de sua casa",
     conversation: "Conte o tipo de imóvel, sua cidade e se ele é próprio ou alugado.",
   },
   "Viagem": {
@@ -161,7 +161,7 @@ const presentations: Record<string, Presentation> = {
     headline: "Seu próximo sonho pode começar com um plano.",
     intro: "Um imóvel, um veículo ou outra conquista. Se você pode se planejar, vamos conversar sobre o consórcio e entender se ele combina com seu prazo e orçamento.",
     context: "A decisão precisa considerar parcelas, taxas, reajustes e regras de contemplação. A gente explica sorteios e lances sem prometer uma data de acesso ao crédito. Assim, você avalia o compromisso antes de entrar no grupo.",
-    image: "consultiva.webp", alt: "Casal conversando sobre planejamento e possibilidades financeiras",
+    image: "produtos/consorcio.webp", alt: "Casal planejando uma futura casa com um caderno sobre a mesa",
     conversation: "Conte o que deseja conquistar, o valor aproximado e em quanto tempo pretende realizar esse plano.",
   },
   "Empréstimo com Garantia": {
@@ -169,7 +169,7 @@ const presentations: Record<string, Presentation> = {
     headline: "Uma decisão de crédito merece uma conversa clara.",
     intro: "Usar um bem como garantia é uma escolha importante. Vamos avaliar as condições disponíveis e explicar os custos, os prazos e os riscos antes de você decidir.",
     context: "Crédito só faz sentido quando cabe na sua realidade. A análise considera a proposta, a elegibilidade do bem e sua capacidade de pagamento. Você entende o custo total e o risco de perda do bem em caso de inadimplência, sem promessa de aprovação.",
-    image: "consultiva.webp", alt: "Pessoas analisando informações financeiras em uma conversa orientada",
+    image: "produtos/emprestimo-garantia.webp", alt: "Empresária avaliando um orçamento com uma consultora em sua loja",
     conversation: "Conte seu objetivo, o valor pretendido e qual bem deseja apresentar como garantia. Não envie documentos sensíveis no primeiro contato.",
   },
   "Financiamento de Veículo": {
@@ -177,15 +177,17 @@ const presentations: Record<string, Presentation> = {
     headline: "Antes de pegar a chave, entenda o próximo passo.",
     intro: "Encontrou o carro que procura? Vamos comparar as condições de financiamento e olhar além do valor da parcela para você escolher com mais clareza.",
     context: "Entrada, prazo, taxas e custo total precisam fazer parte da conversa. A Riseseg ajuda você a entender as propostas e a contratação, sempre considerando a análise de crédito e o que cabe no seu orçamento.",
-    image: "produtos/automovel.webp", alt: "Casal ao lado de um carro em um bairro residencial arborizado",
+    image: "produtos/financiamento-veiculo.webp", alt: "Cliente conversando com uma consultora ao lado de um carro em uma concessionária",
     conversation: "Conte qual veículo pretende comprar, o valor aproximado e a entrada que deseja considerar.",
   },
 };
 
 const photoPositions: Record<string, string> = {
+  "produtos/saude-familiar.webp": "65% 50%",
   "humana.webp": "50% 25%",
   "consultiva.webp": "50% 30%",
   "contemporanea.webp": "50% 40%",
+  "empresas.webp": "64% 50%",
 };
 
 export const productPages = products.map(product => ({
