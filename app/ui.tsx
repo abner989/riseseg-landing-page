@@ -20,8 +20,8 @@ export function Icon({ name, className = '' }: { name: string; className?: strin
   return <svg className={`icon ${className}`} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name] ?? paths.heart}</svg>;
 }
 
-export function Brand({ light = false }: { light?: boolean }) {
-  return <img className="brand-image" src={`rise-seg/logo-riseseg-${light ? 'white' : 'navy'}.png`} alt="Riseseg — Corretora de Seguros & Finance" width="280" height="92"/>;
+export function Brand({ light = false, assetBase = "rise-seg" }: { light?: boolean; assetBase?: string }) {
+  return <img className="brand-image" src={`${assetBase}/logo-riseseg-${light ? 'white' : 'navy'}.png`} alt="Riseseg — Corretora de Seguros & Finance" width="280" height="92"/>;
 }
 
 export function SocialLinks() {

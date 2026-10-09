@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { categories, products } from "./products";
+import { productPages, productPageHref } from "./product-details";
 import { Brand, Icon, SocialLinks, whatsappLink } from "./ui";
 import { partnerGroups } from "./partners";
 
@@ -99,11 +100,12 @@ export default function Home() {
             <div className={`product-image category-${categoryIndex}`}><img src={`rise-seg/${detail.image}`} alt={detail.alt} width="800" height="900" loading="lazy"/><div><Icon name={detail.icon}/><h3>{detail.title}</h3></div></div>
             <div className="product-main">
               <label className="product-picker">Qual solução você procura?<select value={activeProduct} onChange={event => setActiveProduct(Number(event.target.value))}>{categoryProducts.map(item => <option key={item.index} value={item.index}>{item.name}</option>)}</select></label>
-              <article key={product.name} className="product-slide" aria-live="polite" aria-atomic="true"><p className="eyebrow">{product.category}</p><h3>{product.name}</h3><p className="product-description">{product.description}</p><p className="product-audience"><Icon name="people"/>{product.audience}</p><h4>O que pode incluir</h4><ul className="check-list">{product.includes.map(item => <li key={item}><Icon name="check"/>{item}</li>)}</ul><a className="button" href={whatsappLink(`Quero saber mais sobre ${product.name}.`, categoryIndex === 0)} target="_blank" rel="noopener noreferrer">Falar com especialista <Icon name="arrow"/></a></article>
+              <article key={product.name} className="product-slide" aria-live="polite" aria-atomic="true"><p className="eyebrow">{product.category}</p><h3>{product.name}</h3><p className="product-description">{product.description}</p><p className="product-audience"><Icon name="people"/>{product.audience}</p><h4>O que pode incluir</h4><ul className="check-list">{product.includes.map(item => <li key={item}><Icon name="check"/>{item}</li>)}</ul><a className="button" href={productPageHref(product)} aria-label={`Falar com especialista sobre ${product.name}: conhecer a solução`}>Falar com especialista <Icon name="arrow"/></a></article>
               <div className="carousel-navigation"><span>{position + 1} de {categoryProducts.length} soluções neste ramo</span><div><button type="button" aria-label="Produto anterior" onClick={() => goToProduct(-1)}><Icon className="arrow-back" name="arrow"/></button><button type="button" aria-label="Próximo produto" onClick={() => goToProduct(1)}><Icon name="arrow"/></button></div></div>
               <p className="product-note">Disponibilidade, coberturas e condições variam conforme a proposta e o contrato. Vamos explicar tudo antes de você decidir.</p>
             </div>
           </div>
+          <details className="solution-directory"><summary>Prefere ver todas as soluções?</summary><div>{categories.map(category => <section key={category}><h3>{category}</h3>{productPages.filter(item => item.category === category).map(item => <a key={item.slug} href={productPageHref(item)}>{item.name}<Icon name="arrow"/></a>)}</section>)}</div></details>
         </div>
       </section>
 
